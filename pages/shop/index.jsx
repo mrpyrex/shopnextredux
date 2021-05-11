@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { listProducts } from "redux/actions/productActions";
 import { wrapper } from "redux/store";
 
 const shopPage = () => {
-  const { products } = useSelector((state) => state.productList);
-  console.log(products);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(listProducts());
+  }, [dispatch]);
 
   return (
     <Container>
@@ -21,6 +24,13 @@ const shopPage = () => {
 
 export default shopPage;
 
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) =>
+//     ({ req, res, ...etc }) => {
+//       store.dispatch(listProducts(req));
+//     }
+// );
+
 export const getServerSideProps = wrapper.getServerSideProps(
   async ({ req, store }) => {
     await store.dispatch(listProducts(req));
@@ -30,7 +40,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 // export async function getServerSideProps(context) {
 //   const res = await fetch(`http://localhost:8000/api/shop/`);
 //   const data = await res.json();
-
 //   console.log(data);
 
 //   return {

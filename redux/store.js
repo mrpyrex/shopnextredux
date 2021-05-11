@@ -30,8 +30,11 @@ const makeStore = ({ isServer }) => {
 
     const persistedReducer = persistReducer(persistConfig, rootReducer); // Create a new reducer with our existing reducer
 
+    const initialState = {
+    
+    }
     const store = createStore(
-      persistedReducer,
+      persistedReducer,initialState,
       bindMiddleware([thunk])
     ); // Creating the store again
 
@@ -43,5 +46,28 @@ const makeStore = ({ isServer }) => {
 
 // Export the wrapper & wrap the pages/_app.js with this wrapper only
 export const wrapper = createWrapper(makeStore);
+
+
+// const bindMiddleware = (middleware) => {
+//   if (process.env.NODE_ENV !=='production') {
+//     const { composeWithDevTools } = require('redux-devtools-extension')
+//     return composeWithDevTools(applyMiddleware(...middleware))
+//   }
+
+//   return applyMiddleware(...middleware)
+// }
+
+// const reducer = (state, action) => {
+//   if (action.type == HYDRATE) {
+//     const nextState = {
+//       ...state,
+//       ...action.payload
+//     }
+
+//     return nextState
+//   } else {
+//     return rootReducer(state, action)
+//   }
+// }
 
 
